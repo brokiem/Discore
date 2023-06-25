@@ -31,8 +31,8 @@ namespace Discore.Http.Internal
         {
             httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-            httpClient.DefaultRequestHeaders.Add("User-Agent", $"DiscordBot ({DISCORE_URL}, {discoreVersion})");
-            httpClient.DefaultRequestHeaders.Add("Authorization", $"Bot {botToken}");
+            httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) discord/1.0.9013 Chrome/108.0.5359.215 Electron/22.3.2 Safari/537.36");
+            httpClient.DefaultRequestHeaders.Add("Authorization", botToken);
         }
 
         static ApiClient()
