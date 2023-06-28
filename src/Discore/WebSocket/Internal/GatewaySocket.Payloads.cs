@@ -159,18 +159,16 @@ namespace Discore.WebSocket.Internal
                 // TODO: don't hardcode this
                 writer.WriteStartObject("properties");
                 writer.WriteString("os", "Windows");
-                writer.WriteString("browser", "Chrome");
-                writer.WriteString("device", "");
+                writer.WriteString("browser", "Discord Client");
+                writer.WriteString("release_channel", "stable");
+                writer.WriteString("client_version", "1.0.9013");
+                writer.WriteString("os_version", "10.0.19045");
+                writer.WriteString("os_arch", "x64");
                 writer.WriteString("system_locale", "en-US");
                 writer.WriteString("browser_user_agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) discord/1.0.9013 Chrome/108.0.5359.215 Electron/22.3.2 Safari/537.36");
-                writer.WriteString("browser_version", "108.0.5359.215");
-                writer.WriteNumber("os_version", 10);
-                writer.WriteString("referrer", "");
-                writer.WriteString("referring_domain", "");
-                writer.WriteString("referrer_current", "");
-                writer.WriteString("referring_domain_current", "");
-                writer.WriteString("release_channel", "stable");
-                writer.WriteNumber("client_build_number", 209049);
+                writer.WriteString("browser_version", "22.3.2");
+                writer.WriteNumber("client_build_number", 204762);
+                writer.WriteNumber("native_build_number", 33666);
                 writer.WriteNull("client_event_source");
                 writer.WriteEndObject();
 
