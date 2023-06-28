@@ -141,7 +141,7 @@ namespace Discore.WebSocket.Internal
 
                 writer.WriteString("token", token);
                 writer.WriteBoolean("compress", true);
-                writer.WriteNumber("intents", (int)intents);
+                /*writer.WriteNumber("intents", (int)intents);
 
                 if (largeThreshold != null)
                 {
@@ -154,12 +154,45 @@ namespace Discore.WebSocket.Internal
                     writer.WriteNumberValue(shardId);
                     writer.WriteNumberValue(totalShards);
                     writer.WriteEndArray();
-                }
+                }*/
 
+                // TODO: don't hardcode this
                 writer.WriteStartObject("properties");
-                writer.WriteString("$os", RuntimeInformation.OSDescription);
-                writer.WriteString("$browser", "discore");
-                writer.WriteString("$device", "discore");
+                writer.WriteString("os", "Windows");
+                writer.WriteString("browser", "Chrome");
+                writer.WriteString("device", "");
+                writer.WriteString("system_locale", "en-US");
+                writer.WriteString("browser_user_agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) discord/1.0.9013 Chrome/108.0.5359.215 Electron/22.3.2 Safari/537.36");
+                writer.WriteString("browser_version", "108.0.5359.215");
+                writer.WriteNumber("os_version", 10);
+                writer.WriteString("referrer", "");
+                writer.WriteString("referring_domain", "");
+                writer.WriteString("referrer_current", "");
+                writer.WriteString("referring_domain_current", "");
+                writer.WriteString("release_channel", "stable");
+                writer.WriteNumber("client_build_number", 209049);
+                writer.WriteNull("client_event_source");
+                writer.WriteEndObject();
+
+                writer.WriteStartObject("client_state");
+                writer.WriteNumber("api_code_version", 0);
+                writer.WriteStartObject("guild_versions");
+                writer.WriteEndObject();
+                writer.WriteString("highest_last_message_id", "0");
+                writer.WriteString("private_channels_version", "0");
+                writer.WriteNumber("read_state_version", 0);
+                writer.WriteNumber("user_guild_settings_version", -1);
+                writer.WriteNumber("user_settings_version", -1);
+                writer.WriteEndObject();
+
+                writer.WriteNumber("capabilities", 8189);
+
+                writer.WriteStartObject("presence");
+                writer.WriteString("status", "unknown");
+                writer.WriteNumber("since", 0);
+                writer.WriteStartArray("activities");
+                writer.WriteEndArray();
+                writer.WriteBoolean("afk", false);
                 writer.WriteEndObject();
 
                 writer.WriteEndObject();
