@@ -13,7 +13,7 @@ namespace Discore.Http.Internal
 {
     class ApiClient : IDisposable
     {
-        public const string BASE_URL = "https://canary.discord.com/api/v10";
+        public const string BASE_URL = "https://discord.com/api/v10";
 
         public bool RetryOnRateLimit { get; set; } = true;
 
