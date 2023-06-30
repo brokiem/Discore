@@ -134,7 +134,7 @@ namespace Discore.Voice.Internal
                 writer.Flush();
             }
 
-            byte[] payload = buffer.WrittenMemory.ToArray();
+            byte[] payload = buffer.WrittenSpan.ToArray();
 
             return SendAsync(payload);
         }
