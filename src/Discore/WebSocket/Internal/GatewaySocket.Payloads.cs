@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text.Json;
@@ -95,23 +96,20 @@ namespace Discore.WebSocket.Internal
         /// <exception cref="InvalidOperationException">Thrown if the socket is not connected.</exception>
         async Task SendPayload(GatewayOPCode op, Action<Utf8JsonWriter> builder)
         {
-            // TODO: There must be a more memory efficient way of doing this
-
             // Create payload bytes
-            using var stream = new MemoryStream();
-            using var writer = new Utf8JsonWriter(stream);
+            var buffer = new ArrayBufferWriter<byte>();
+            await using (var writer = new Utf8JsonWriter(buffer))
+            {
+                writer.WriteStartObject();
 
-            writer.WriteStartObject();
+                writer.WriteNumber("op", (int)op);
+                writer.WritePropertyName("d");
+                builder(writer);
 
-            writer.WriteNumber("op", (int)op);
-            writer.WritePropertyName("d");
-            builder(writer);
+                writer.WriteEndObject();
+            }
 
-            writer.WriteEndObject();
-
-            writer.Flush();
-
-            byte[] payload = stream.ToArray();
+            byte[] payload = buffer.WrittenSpan.ToArray();
 
             // Check with the payload rate limiter
             await outboundPayloadRateLimiter.Invoke().ConfigureAwait(false);

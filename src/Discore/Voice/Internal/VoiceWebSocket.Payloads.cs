@@ -1,6 +1,7 @@
 using Discore.WebSocket;
 using Nito.AsyncEx;
 using System;
+using System.Buffers;
 using System.IO;
 using System.Net;
 using System.Text.Json;
@@ -119,23 +120,21 @@ namespace Discore.Voice.Internal
         /// <exception cref="NotSupportedException">Thrown if the given data cannot be serialized as JSON.</exception>
         Task SendPayload(VoiceOPCode op, Action<Utf8JsonWriter> builder)
         {
-            // TODO: There must be a more memory efficient way of doing this
-
             // Create payload bytes
-            using var stream = new MemoryStream();
-            using var writer = new Utf8JsonWriter(stream);
+            var buffer = new ArrayBufferWriter<byte>();
+            using (var writer = new Utf8JsonWriter(buffer))
+            {
+                writer.WriteStartObject();
 
-            writer.WriteStartObject();
+                writer.WriteNumber("op", (int)op);
+                writer.WritePropertyName("d");
+                builder(writer);
 
-            writer.WriteNumber("op", (int)op);
-            writer.WritePropertyName("d");
-            builder(writer);
+                writer.WriteEndObject();
+                writer.Flush();
+            }
 
-            writer.WriteEndObject();
-
-            writer.Flush();
-
-            byte[] payload = stream.ToArray();
+            byte[] payload = buffer.WrittenMemory.ToArray();
 
             return SendAsync(payload);
         }
