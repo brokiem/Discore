@@ -41,8 +41,8 @@ namespace Discore
             writer.WriteString("system_locale", "en-US");
             writer.WriteString("browser_user_agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) discord/1.0.9013 Chrome/108.0.5359.215 Electron/22.3.2 Safari/537.36");
             writer.WriteString("browser_version", "22.3.2");
-            writer.WriteNumber("client_build_number", 204762);
-            writer.WriteNumber("native_build_number", 33666);
+            writer.WriteNumber("client_build_number", 210099);
+            writer.WriteNumber("native_build_number", 34160);
             writer.WriteNull("client_event_source");
         }
 
