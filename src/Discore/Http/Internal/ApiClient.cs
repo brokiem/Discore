@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Net;
@@ -30,9 +31,35 @@ namespace Discore.Http.Internal
         public ApiClient(string botToken)
         {
             httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-            httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) discord/1.0.9013 Chrome/108.0.5359.215 Electron/22.3.2 Safari/537.36");
-            httpClient.DefaultRequestHeaders.Add("Authorization", botToken);
+            httpClient.DefaultRequestHeaders.Add("accept", "*/*");
+            httpClient.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) discord/1.0.9013 Chrome/108.0.5359.215 Electron/22.3.2 Safari/537.36");
+            httpClient.DefaultRequestHeaders.Add("authorization", botToken);
+
+            // TODO: don't hardcode this 
+            httpClient.DefaultRequestHeaders.Add("accept-language", "en-US");
+            httpClient.DefaultRequestHeaders.Add("referer", "https://discord.com/channels/@me");
+            httpClient.DefaultRequestHeaders.Add("sec-ch-ua", "\"Not?A_Brand\";v=\"8\", \"Chromium\";v=\"108\"");
+            httpClient.DefaultRequestHeaders.Add("sec-ch-ua-mobile", "?0");
+            httpClient.DefaultRequestHeaders.Add("sec-ch-ua-platform", "\"Windows\"");
+            httpClient.DefaultRequestHeaders.Add("sec-fetch-dest", "empty");
+            httpClient.DefaultRequestHeaders.Add("sec-fetch-mode", "cors");
+            httpClient.DefaultRequestHeaders.Add("sec-fetch-site", "same-origin");
+            httpClient.DefaultRequestHeaders.Add("x-debug-options", "bugReporterEnabled");
+            httpClient.DefaultRequestHeaders.Add("x-discord-locale", "en-US");
+            httpClient.DefaultRequestHeaders.Add("x-discord-timezone", "Asia/Makassar");
+
+            var buffer = new ArrayBufferWriter<byte>();
+            using (var writer = new Utf8JsonWriter(buffer))
+            {
+                writer.WriteStartObject();
+
+                Utils.AppendClientProperties(writer);
+
+                writer.WriteEndObject();
+            }
+
+            byte[] payload = buffer.WrittenSpan.ToArray();
+            httpClient.DefaultRequestHeaders.Add("x-super-properties", Convert.ToBase64String(payload));
         }
 
         static ApiClient()
