@@ -1,5 +1,6 @@
 using Discore.Http.Internal;
 using System;
+using System.Buffers;
 using System.IO;
 using System.Text;
 using System.Text.Json;
@@ -26,13 +27,13 @@ namespace Discore.Http
 
         string BuildJsonContent(Action<Utf8JsonWriter> builder)
         {
-            using var stream = new MemoryStream();
-            using var writer = new Utf8JsonWriter(stream);
+            var buffer = new ArrayBufferWriter<byte>();
+            using (var writer = new Utf8JsonWriter(buffer))
+            {
+                builder(writer);
+            }
 
-            builder(writer);
-            writer.Flush();
-
-            return Encoding.UTF8.GetString(stream.GetBuffer().AsSpan(0, (int)stream.Length));
+            return Encoding.UTF8.GetString(buffer.WrittenSpan.ToArray());
         }
 
         DiscordChannel DeserializeChannelData(JsonElement data)
