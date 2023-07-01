@@ -131,7 +131,6 @@ namespace Discore.Voice.Internal
                 builder(writer);
 
                 writer.WriteEndObject();
-                writer.Flush();
             }
 
             byte[] payload = buffer.WrittenSpan.ToArray();
