@@ -1,5 +1,6 @@
 using Discore.Voice;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -218,6 +219,19 @@ namespace Discore.WebSocket
         /// closes unexpectedly until the given cancellation token is cancelled or the Gateway's shard is stopped.
         /// </remarks>
         Task RequestGuildMembersAsync(Snowflake guildId, string query = "", int limit = 0, CancellationToken? cancellationToken = null);
+
+        /// <summary>
+        /// Subscribe to sections of a guild's member list.
+        /// </summary>
+        /// <param name="guildId"></param>
+        /// <param name="channels"></param>
+        /// <param name="members"></param>
+        /// <param name="activities"></param>
+        /// <param name="typing"></param>
+        /// <param name="threads"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task SubscribeGuildEventsAsync(Snowflake guildId, Dictionary<Snowflake, List<int[]>>? channels, Snowflake[]? members, bool? activities, bool? typing, bool? threads, CancellationToken? cancellationToken = null);
 
         /// <summary>
         /// Joins, moves, or disconnects the application from a voice channel.

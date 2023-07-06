@@ -1,5 +1,6 @@
 using System;
 using System.Buffers;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text.Json;
@@ -255,6 +256,70 @@ namespace Discore.WebSocket.Internal
             }
 
             return SendPayload(GatewayOPCode.RequestGuildMembers, BuildPayload);
+        }
+
+        public Task SendSubscribeGuildEventsPayload(Snowflake guildId, Dictionary<Snowflake, List<int[]>>? channels,
+            Snowflake[]? members, bool? activities, bool? typing, bool? threads)
+        {
+            void BuildPayload(Utf8JsonWriter writer)
+            {
+                writer.WriteStartObject();
+
+                writer.WriteSnowflake("guild_id", guildId);
+
+                if (channels != null)
+                {
+                    writer.WritePropertyName("channels");
+                    writer.WriteStartObject();
+
+                    foreach (KeyValuePair<Snowflake, List<int[]>> channel in channels)
+                    {
+                        writer.WriteSnowflakeProperty(channel.Key);
+                        writer.WriteStartArray(); // Start the array
+                        foreach (int[] range in channel.Value)
+                        {
+                            writer.WriteStartArray(); // Start the inner array
+                            writer.WriteNumberValue(range[0]);
+                            writer.WriteNumberValue(range[1]);
+                            writer.WriteEndArray(); // End the inner array
+                        }
+
+                        writer.WriteEndArray(); // End the outer array
+                    }
+
+                    writer.WriteEndObject(); // End the "channels" object
+                }
+
+                if (members != null)
+                {
+                    writer.WriteStartArray("members");
+                    foreach (Snowflake member in members)
+                    {
+                        writer.WriteSnowflakeValue(member);
+                    }
+
+                    writer.WriteEndArray();
+                }
+
+                if (activities != null)
+                {
+                    writer.WriteBoolean("activities", activities.Value);
+                }
+
+                if (typing != null)
+                {
+                    writer.WriteBoolean("typing", typing.Value);
+                }
+
+                if (threads != null)
+                {
+                    writer.WriteBoolean("threads", threads.Value);
+                }
+
+                writer.WriteEndObject();
+            }
+
+            return SendPayload(GatewayOPCode.SubscribeGuildEvents, BuildPayload);
         }
 
         /// <exception cref="DiscordWebSocketException">Thrown if the payload fails to send because of a WebSocket error.</exception>

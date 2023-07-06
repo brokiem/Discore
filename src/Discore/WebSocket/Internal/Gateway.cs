@@ -161,6 +161,25 @@ namespace Discore.WebSocket.Internal
             }).ConfigureAwait(false);
         }
 
+        public async Task SubscribeGuildEventsAsync(Snowflake guildId, Dictionary<Snowflake, List<int[]>>? channels,
+            Snowflake[]? members, bool? activities, bool? typing, bool? threads,
+            CancellationToken? cancellationToken = null)
+        {
+            if (isDisposed)
+                throw new ObjectDisposedException(GetType().FullName);
+            if (socket == null || state != GatewayState.Connected)
+                throw new InvalidOperationException("The gateway is not currently connected!");
+
+            CancellationToken ct = cancellationToken ?? CancellationToken.None;
+
+            await RepeatTrySendPayload(ct, "SubscribeGuildEvents", async () =>
+            {
+                await socket
+                    .SendSubscribeGuildEventsPayload(guildId, channels, members, activities, typing, threads)
+                    .ConfigureAwait(false);
+            }).ConfigureAwait(false);
+        }
+
         /// <exception cref="InvalidOperationException"></exception>
         /// <exception cref="ObjectDisposedException"></exception>
         /// <exception cref="OperationCanceledException">

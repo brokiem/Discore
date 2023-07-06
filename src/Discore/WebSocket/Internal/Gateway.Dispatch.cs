@@ -33,6 +33,7 @@ namespace Discore.WebSocket.Internal
         public event EventHandler<GuildMemberRemoveEventArgs>? OnGuildMemberRemove;
         public event EventHandler<GuildMemberUpdateEventArgs>? OnGuildMemberUpdate;
         public event EventHandler<GuildMemberChunkEventArgs>? OnGuildMembersChunk;
+        public event EventHandler<GuildMemberListUpdateEventArgs>? OnGuildMemberListUpdate;
 
         public event EventHandler<GuildRoleCreateEventArgs>? OnGuildRoleCreate;
         public event EventHandler<GuildRoleUpdateEventArgs>? OnGuildRoleUpdate;
@@ -384,6 +385,34 @@ namespace Discore.WebSocket.Internal
 
             // Fire event
             OnGuildMemberUpdate?.Invoke(this, new GuildMemberUpdateEventArgs(shard, guildId, partialMember));
+        }
+
+        [DispatchEvent("GUILD_MEMBER_LIST_UPDATE")]
+        void HandleGuildMemberListUpdateEvent(JsonElement data)
+        {
+            Snowflake guildId = data.GetProperty("guild_id").GetSnowflake();
+            string id = data.GetProperty("id").GetString()!;
+            int onlineCount = data.GetProperty("online_count").GetInt32();
+            int memberCount = data.GetProperty("member_count").GetInt32();
+
+            JsonElement operatorsData = data.GetProperty("ops");
+            var operators = new DiscordMemberListUpdateOperator[operatorsData.GetArrayLength()];
+
+            for (int i = 0; i < operators.Length; i++)
+            {
+                operators[i] = new DiscordMemberListUpdateOperator(operatorsData[i], guildId);
+            }
+
+            JsonElement groupsData = data.GetProperty("groups");
+            var groups = new DiscordGuildMemberListGroup[groupsData.GetArrayLength()];
+
+            for (int i = 0; i < operators.Length; i++)
+            {
+                groups[i] = new DiscordGuildMemberListGroup(groupsData[i]);
+            }
+
+            // Fire event
+            OnGuildMemberListUpdate?.Invoke(this, new GuildMemberListUpdateEventArgs(shard, guildId, id, onlineCount, memberCount, operators, groups));
         }
 
         [DispatchEvent("GUILD_MEMBERS_CHUNK")]

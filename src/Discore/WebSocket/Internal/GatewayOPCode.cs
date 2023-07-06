@@ -13,6 +13,7 @@ namespace Discore.WebSocket.Internal
         RequestGuildMembers,
         InvalidSession,
         Hello,
-        HeartbeatAck
+        HeartbeatAck,
+        SubscribeGuildEvents = 14
     }
 }

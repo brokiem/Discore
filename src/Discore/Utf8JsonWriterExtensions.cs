@@ -20,6 +20,14 @@ namespace Discore
                 writer.WriteStringValue(value.Value.ToString());
         }
 
+        public static void WriteSnowflakeProperty(this Utf8JsonWriter writer, Snowflake? value)
+        {
+            if (value == null)
+                writer.WriteNullValue();
+            else
+                writer.WritePropertyName(value.Value.ToString());
+        }
+
         public static void WriteNumber(this Utf8JsonWriter writer, string propertyName, int? value)
         {
             if (value == null)

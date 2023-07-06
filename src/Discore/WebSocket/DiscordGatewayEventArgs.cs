@@ -90,10 +90,12 @@ namespace Discore.WebSocket
         /// The ID of the user that started typing.
         /// </summary>
         public Snowflake UserId { get; }
+
         /// <summary>
         /// The ID of the text channel that the user starting typing in.
         /// </summary>
         public Snowflake ChannelId { get; }
+
         /// <summary>
         /// Unix time in seconds when the typing started.
         /// </summary>
@@ -116,6 +118,7 @@ namespace Discore.WebSocket
         /// The ID of the guild that the user joined.
         /// </summary>
         public Snowflake GuildId { get; }
+
         /// <summary>
         /// The guild-specific user information for the new member.
         /// </summary>
@@ -135,6 +138,7 @@ namespace Discore.WebSocket
         /// The ID of the guild that the user left.
         /// </summary>
         public Snowflake GuildId { get; }
+
         /// <summary>
         /// The user that left the guild.
         /// </summary>
@@ -154,6 +158,7 @@ namespace Discore.WebSocket
         /// The ID of the guild the member is in.
         /// </summary>
         public Snowflake GuildId { get; }
+
         /// <summary>
         /// Partial updated information for the member.
         /// </summary>
@@ -193,6 +198,7 @@ namespace Discore.WebSocket
         /// The ID of the guild that the members are in.
         /// </summary>
         public Snowflake GuildId { get; }
+
         /// <summary>
         /// A list of all members included in the chunk.
         /// </summary>
@@ -203,6 +209,35 @@ namespace Discore.WebSocket
         {
             GuildId = guildId;
             Members = members;
+        }
+    }
+
+    public class GuildMemberListUpdateEventArgs : DiscordGatewayEventArgs
+    {
+        /// <summary>
+        /// The ID of the guild that the members are in.
+        /// </summary>
+        public Snowflake GuildId { get; }
+
+        /// <summary>
+        /// The list being updated, output of the list_id function
+        /// </summary>
+        public string Id { get; }
+
+        public int OnlineCount { get; }
+        public int MemberCount { get; }
+        public DiscordMemberListUpdateOperator[] Operators { get; }
+        public DiscordGuildMemberListGroup[] Groups { get; }
+
+        internal GuildMemberListUpdateEventArgs(Shard shard, Snowflake guildId, string id, int onlineCount, int memberCount, DiscordMemberListUpdateOperator[] operators, DiscordGuildMemberListGroup[] groups)
+            : base(shard)
+        {
+            GuildId = guildId;
+            Id = id;
+            OnlineCount = onlineCount;
+            MemberCount = memberCount;
+            Operators = operators;
+            Groups = groups;
         }
     }
 
