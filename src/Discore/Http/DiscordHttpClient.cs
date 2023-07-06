@@ -53,7 +53,8 @@ namespace Discore.Http
             else if (type == DiscordChannelType.GuildStore)
                 return new DiscordGuildStoreChannel(data);
             else
-                throw new NotSupportedException($"{type} isn't a known type of {nameof(DiscordChannel)}.");
+                return new DiscordGuildUnknownChannel(data);
+                //throw new NotSupportedException($"{type} isn't a known type of {nameof(DiscordChannel)}.");
         }
 
         public void Dispose()

@@ -5,6 +5,7 @@ namespace Discore
     /// </summary>
     public enum DiscordChannelType
     {
+        Unknown = -1,
         GuildText = 0,
         DirectMessage = 1,
         GuildVoice = 2,
