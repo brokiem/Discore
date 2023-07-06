@@ -164,7 +164,7 @@ namespace Discore.WebSocket.Internal
                 Utils.AppendClientState(writer);
                 writer.WriteEndObject();
 
-                writer.WriteNumber("capabilities", 8189);
+                writer.WriteNumber("capabilities", 16381);
 
                 writer.WriteStartObject("presence");
                 writer.WriteString("status", "unknown");
